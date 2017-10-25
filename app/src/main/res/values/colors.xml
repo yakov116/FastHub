@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <color name="transparent">#00000000</color>
-    <color name="black">#FF000000</color>
+    <color name="transparent">#00FFFFFF</color>
     <color name="white">#FFFFFF</color>
-    <color name="light_gray">#ffb2b2b2</color>
-    <color name="carrot">@color/material_amber_800</color>
+
+    <color name="black_overlay">#66000000</color>
+    <color name="black_light">#212121</color>
+
     <color name="material_amber_100">#FFECB3</color>
     <color name="material_amber_200">#FFE082</color>
     <color name="material_amber_300">#FFD54F</color>
@@ -111,6 +112,7 @@
     <color name="material_green_accent_400">#00E676</color>
     <color name="material_green_accent_700">#00C853</color>
     <color name="material_grey_200">#EEEEEE</color>
+    <color name="material_grey_350">#D0D0D0</color>
     <color name="material_grey_400">#BDBDBD</color>
     <color name="material_grey_500">#9E9E9E</color>
     <color name="material_grey_700">#616161</color>
@@ -157,7 +159,8 @@
     <color name="material_light_green_accent_200">#B2FF59</color>
     <color name="material_light_green_accent_400">#76FF03</color>
     <color name="material_light_green_accent_700">#64DD17</color>
-    <color name="material_light_white">#eeeeee</color>
+    <color name="material_light_white">#EEEEEE</color>
+    <color name="material_white">#FFFFFF</color>
     <color name="material_lime_100">#F0F4C3</color>
     <color name="material_lime_200">#E6EE9C</color>
     <color name="material_lime_300">#DCE775</color>
@@ -256,4 +259,10 @@
     <color name="material_yellow_accent_200">#FFFF00</color>
     <color name="material_yellow_accent_400">#FFEA00</color>
     <color name="material_yellow_accent_700">#FFD600</color>
+
+    <color name="commit_file_added_color">#28a745</color>
+    <color name="commit_file_removed_color">#cb2431</color>
+    <color name="commit_file_renamed_color">#6a737d</color>
+    <color name="commit_file_modified_color">#dbab09</color>
+
 </resources>

@@ -1,43 +1,75 @@
-package com.fastaccess.ui.adapter;
-
-import android.support.annotation.NonNull;
-import android.view.ViewGroup;
-
-import com.fastaccess.data.dao.model.User;
-import com.fastaccess.ui.adapter.viewholder.UsersViewHolder;
-import com.fastaccess.ui.widgets.recyclerview.BaseRecyclerAdapter;
-import com.fastaccess.ui.widgets.recyclerview.BaseViewHolder;
-
-import java.util.ArrayList;
-
-/**
- * Created by Kosh on 11 Nov 2016, 2:07 PM
+/*
+ *    Copyright 2017 ThirtyDegreesRay
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
  */
 
-public class UsersAdapter extends BaseRecyclerAdapter<User, UsersViewHolder, BaseViewHolder.OnItemClickListener<User>> {
+package com.thirtydegreesray.openhub.ui.adapter;
 
-    private boolean isContributor;
-    private boolean isFilter;
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-    public UsersAdapter(@NonNull ArrayList<User> list) {
-        this(list, false);
+import com.thirtydegreesray.openhub.R;
+import com.thirtydegreesray.openhub.common.GlideApp;
+import com.thirtydegreesray.openhub.mvp.model.User;
+import com.thirtydegreesray.openhub.ui.adapter.base.BaseAdapter;
+import com.thirtydegreesray.openhub.ui.adapter.base.BaseViewHolder;
+import com.thirtydegreesray.openhub.ui.fragment.base.BaseFragment;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
+
+/**
+ * Created by ThirtyDegreesRay on 2017/8/16 17:12:05
+ */
+
+public class UsersAdapter extends BaseAdapter<UsersAdapter.ViewHolder, User> {
+
+    @Inject
+    public UsersAdapter(Context context, BaseFragment fragment){
+        super(context, fragment);
     }
 
-    public UsersAdapter(@NonNull ArrayList<User> list, boolean isContributor) {
-        this(list, isContributor, false);
+    @Override
+    protected int getLayoutId(int viewType) {
+        return R.layout.layout_item_user;
     }
 
-    public UsersAdapter(@NonNull ArrayList<User> list, boolean isContributor, boolean isFilter) {
-        super(list);
-        this.isContributor = isContributor;
-        this.isFilter = isFilter;
+    @Override
+    protected ViewHolder getViewHolder(View itemView, int viewType) {
+        return new ViewHolder(itemView);
     }
 
-    @Override protected UsersViewHolder viewHolder(ViewGroup parent, int viewType) {
-        return UsersViewHolder.newInstance(parent, this, isFilter);
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        super.onBindViewHolder(holder, position);
+        GlideApp.with(fragment)
+                .load(data.get(position).getAvatarUrl())
+                .placeholder(R.mipmap.logo)
+                .into(holder.avatar);
+        holder.name.setText(data.get(position).getLogin());
     }
 
-    @Override protected void onBindView(UsersViewHolder holder, int position) {
-        holder.bind(getItem(position), isContributor);
+    class ViewHolder extends BaseViewHolder {
+        @BindView(R.id.avatar) ImageView avatar;
+        @BindView(R.id.name) TextView name;
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+        }
     }
+
 }

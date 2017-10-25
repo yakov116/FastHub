@@ -1,11 +1,11 @@
 *.iml
 .gradle
 /local.properties
+/.idea
+#/.idea/libraries
 .DS_Store
 /build
-/gradle.properties
-/.idea/
-/app/google-services.json
-/app/build/
-/app/src/main/res/values/secrets.xml
-/app/fastaccess-key
+/captures
+.externalNativeBuild
+app/libs/
+*.apk

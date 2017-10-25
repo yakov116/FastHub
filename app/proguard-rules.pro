@@ -1,76 +1,69 @@
--keepattributes SourceFile,LineNumberTable
--dontobfuscate
--optimizations !code/simplification/arithmetic,!field/*,!class/merging/*,!code/allocation/variable
--keepattributes *Annotation*,Signature
--keepclassmembers class * implements java.io.Serializable {
-    static final long serialVersionUID;
-    private static final java.io.ObjectStreamField[] serialPersistentFields;
-    private void writeObject(java.io.ObjectOutputStream);
-    private void readObject(java.io.ObjectInputStream);
-    java.lang.Object writeReplace();
-    java.lang.Object readResolve();
+# Add project specific ProGuard rules here.
+# By default, the flags in this file are appended to flags specified
+# in /Users/MicroVideo/Library/Android/sdk/tools/proguard/proguard-android.txt
+# You can edit the include path and order by changing the proguardFiles
+# directive in build.gradle.
+#
+# For more details, see
+#   http://developer.android.com/guide/developing/tools/proguard.html
+
+# Add any project specific keep options here:
+
+# If your project uses WebView with JS, uncomment the following
+# and specify the fully qualified class name to the JavaScript interface
+# class:
+#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+#   public *;
+#}
+
+# Uncomment this to preserve the line number information for
+# debugging stack traces.
+#-keepattributes SourceFile,LineNumberTable
+
+# If you keep the line number information, uncomment this to
+# hide the original source file name.
+#-renamesourcefileattribute SourceFile
+
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-dontwarn
+-verbose
+
+-dontoptimize
+-dontpreverify
+
+-ignorewarnings
+
+-dontwarn javax.annotation.**
+-dontwarn javax.inject.**
+
+-keep class com.thirtydegreesray.openhub.http.model.** { *; }
+-keep class com.thirtydegreesray.openhub.mvp.model.** { *; }
+
+# DataAutoAccess
+-keep class com.thirtydegreesray.dataautoaccess.** { *; }
+-keep class **$$DataAccessor { *; }
+-keepclasseswithmembernames class * { @com.thirtydegreesray.dataautoaccess.annotation.AutoAccess <fields>;}
+
+# greenDAO 3
+-keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
+public static java.lang.String TABLENAME;
 }
--keepclassmembers class **.R$* {
-  public static <fields>;
+-keep class **$Properties
+
+#EventBus
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe <methods>;
 }
--keep class * implements android.os.Parcelable {
-  public static final android.os.Parcelable$Creator *;
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+# Only required if you use AsyncExecutor
+-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+    <init>(java.lang.Throwable);
 }
--keep public class * implements butterknife.Unbinder { public <init>(**, android.view.View); }
--keep class butterknife.*
--keepclasseswithmembernames class * { @butterknife.* <methods>; }
--keepclasseswithmembernames class * { @butterknife.* <fields>; }
--keep class retrofit.** { *; }
--keepattributes Signature
--keepattributes Exceptions
--keepclasseswithmembers class * {
-    @retrofit.http.* <methods>;
-}
--keep class com.google.gson.** { *; }
--keep class com.google.inject.** { *; }
--keep class org.apache.** { *; }
--keep class javax.inject.** { *; }
--keep class retrofit.** { *; }
--keep class com.squareup.okhttp.** { *; }
--keep interface com.squareup.okhttp.** { *; }
--keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
-   long producerIndex;
-   long consumerIndex;
-}
--keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
-   long producerNode;
-   long consumerNode;
-}
--keepclasseswithmembernames class * {
-    native <methods>;
-}
--keepclassmembers enum * { *; }
--keepclassmembers enum * {
- public static **[] values();
- public static ** valueOf(java.lang.String);
-}
--keep class **$$Icepick { *; }
--keepclasseswithmembernames class * {
-    @icepick.* <fields>;
-}
--keep class com.fastaccess.data.** { *; }
--keep class com.fastaccess.provider.rest.** { *; }
--keepclassmembers class com.prettifier.pretty.callback.MarkDownInterceptorInterface {
-   public *;
-}
--keepclassmembers enum io.requery.** {
-    public static **[] values();
-    public static ** valueOf(java.lang.String);
-}
--keep class .R
--keep class **.R$* {
-    <fields>;
-}
--keep class net.nightwhistler.** { *; }
--keep class org.htmlcleaner.** { *; }
--keeppackagenames org.jsoup.nodes
--keep class com.github.b3er.** { *; }
--keep class com.memoizrlabs.** { *; }
+
+#Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public class * extends com.bumptech.glide.AppGlideModule
 -keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
@@ -78,57 +71,33 @@
   public *;
 }
 
--dontwarn com.github.b3er.**
--dontwarn com.memoizrlabs.**
--dontwarn java.lang.FunctionalInterface
--dontwarn java.util.**
--dontwarn java.time.**
--dontwarn javax.annotation.**
--dontwarn org.jetbrains.annotations.**
--dontwarn javax.cache.**
--dontwarn javax.naming.**
--dontwarn javax.transaction.**
--dontwarn java.sql.**
--dontwarn android.support.**
--dontwarn io.requery.cache.**
--dontwarn io.requery.rx.**
--dontwarn io.requery.reactivex.**
--dontwarn io.requery.reactor.**
--dontwarn io.requery.query.**
--dontwarn io.requery.android.sqlcipher.**
--dontwarn io.requery.android.sqlitex.**
--dontwarn org.jaxen.**
--dontwarn org.jdom.**
--dontwarn com.google.android.gms.**
--dontwarn android.animation.**
--dontwarn java.io.**
--dontwarn android.content.**
--dontwarn org.jdom.**
--dontwarn kotlin.reflect.jvm.internal.impl.descriptors.CallableDescriptor
--dontwarn kotlin.reflect.jvm.internal.impl.descriptors.ClassDescriptor
--dontwarn kotlin.reflect.jvm.internal.impl.descriptors.ClassifierDescriptorWithTypeParameters
--dontwarn kotlin.reflect.jvm.internal.impl.descriptors.annotations.AnnotationDescriptor
--dontwarn kotlin.reflect.jvm.internal.impl.descriptors.impl.PropertyDescriptorImpl
--dontwarn kotlin.reflect.jvm.internal.impl.load.java.JavaClassFinder
--dontwarn kotlin.reflect.jvm.internal.impl.resolve.OverridingUtil
--dontwarn kotlin.reflect.jvm.internal.impl.types.DescriptorSubstitutor
--dontwarn kotlin.reflect.jvm.internal.impl.types.DescriptorSubstitutor
--dontwarn kotlin.reflect.jvm.internal.impl.types.TypeConstructor
--dontwarn java.beans.**
--dontwarn javax.**
--dontwarn lombok.**
--dontwarn java.lang.invoke.*
--dontwarn rx.**
--dontwarn com.squareup.okhttp.**
+#Bugly
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
+-keep class android.support.**{*;}
+
+# OkHttp3
+-dontwarn okhttp3.logging.**
+-keep class okhttp3.internal.**{*;}
 -dontwarn okio.**
--dontwarn org.apache.**
--dontwarn android.net.http.AndroidHttpClient
--dontwarn retrofit.**
--dontwarn retrofit2.adapter.rxjava.CompletableHelper$**
--dontwarn retrofit2.Platform$Java8
+# Retrofit
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
+#-keepattributes Signature-keepattributes Exceptions
+# RxJava RxAndroid
 -dontwarn sun.misc.**
--dontwarn sun.misc.Unsafe
--dontwarn com.octo.android.robospice.retrofit.RetrofitJackson**
--dontwarn retrofit.appengine.UrlFetchClient
--dontwarn icepick.**
--dontwarn com.fastaccess.ui.modules.repos.**
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+    long producerIndex;
+    long consumerIndex;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode producerNode;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode consumerNode;
+}
+# Gson
+-keep class com.google.gson.stream.** { *; }
+-keepattributes EnclosingMethod
+-keep class com.thirtydegreesray.openhub.mvp.model.**{*;}
+-keep class com.thirtydegreesray.openhub.dao.**{*;}

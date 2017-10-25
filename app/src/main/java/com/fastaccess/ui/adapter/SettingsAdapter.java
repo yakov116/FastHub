@@ -1,70 +1,107 @@
-package com.fastaccess.ui.adapter;
+/*
+ *    Copyright 2017 ThirtyDegreesRay
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package com.thirtydegreesray.openhub.ui.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.view.LayoutInflater;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.TextView;
 
-import com.fastaccess.R;
-import com.fastaccess.data.dao.SettingsModel;
-import com.fastaccess.ui.widgets.FontTextView;
-import com.fastaccess.ui.widgets.ForegroundImageView;
+import com.thirtydegreesray.openhub.R;
+import com.thirtydegreesray.openhub.mvp.model.SettingModel;
+import com.thirtydegreesray.openhub.ui.adapter.base.BaseAdapter;
+import com.thirtydegreesray.openhub.ui.adapter.base.BaseViewHolder;
+import com.thirtydegreesray.openhub.util.StringUtils;
 
-import java.util.ArrayList;
+import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
- * Created by JediB on 5/12/2017.
+ * Created on 2017/8/2.
+ *
+ * @author ThirtyDegreesRay
  */
 
-public class SettingsAdapter extends BaseAdapter {
+public class SettingsAdapter extends BaseAdapter<SettingsAdapter.ViewHolder, SettingModel> {
 
-    private ArrayList<SettingsModel> settings;
-    private final LayoutInflater inflater;
+    private ItemEventListener itemEventListener;
 
-    public SettingsAdapter(@NonNull Context context, @NonNull ArrayList<SettingsModel> settings) {
-        this.settings = settings;
-        this.inflater = LayoutInflater.from(context);
+    @Inject
+    public SettingsAdapter(Context context) {
+        super(context);
     }
 
-    @Override public int getCount() {
-        return settings.size();
+    public void setItemEventListener(@NonNull ItemEventListener itemEventListener) {
+        this.itemEventListener = itemEventListener;
     }
 
-    @Override public SettingsModel getItem(int position) {
-        return settings.get(position);
+    @Override
+    protected int getLayoutId(int viewType) {
+        return R.layout.layout_item_row;
     }
 
-    @Override public long getItemId(int position) {
-        return position;
+    @Override
+    protected ViewHolder getViewHolder(final View itemView, int viewType) {
+        ViewHolder viewHolder = new ViewHolder(itemView);
+        viewHolder.switchBn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                int position = (int) buttonView.getTag(TAG_POSITION);
+                itemEventListener.onSwitchCheckedChanged(position, isChecked);
+            }
+        });
+        return viewHolder;
     }
 
-    @Override public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
-        View row = convertView;
-        if (row == null) {
-            row = inflater.inflate(R.layout.icon_row_item, parent, false);
-            viewHolder = new ViewHolder(row);
-            row.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) row.getTag();
+    @Override
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+        super.onBindViewHolder(holder, position);
+        SettingModel model = data.get(position);
+        holder.iconImage.setImageResource(model.getIconResId());
+        holder.titleText.setText(model.getTitle());
+        if(StringUtils.isBlank(model.getDesc())){
+            holder.descText.setVisibility(View.GONE);
+        }else{
+            holder.descText.setVisibility(View.VISIBLE);
+            holder.descText.setText(model.getDesc());
         }
-        SettingsModel model = getItem(position);
-        viewHolder.title.setText(model.getTitle());
-        viewHolder.image.setImageResource(model.getImage());
-        viewHolder.summary.setVisibility(View.GONE);
-        return row;
+        holder.switchBn.setTag(TAG_POSITION, position);
+        holder.switchBn.setVisibility(model.isSwitchEnable() ? View.VISIBLE : View.GONE);
+        holder.switchBn.setChecked(model.isSwitchChecked());
     }
 
-    static class ViewHolder {
-        @BindView(R.id.iconItemImage) ForegroundImageView image;
-        @BindView(R.id.iconItemTitle) FontTextView title;
-        @BindView(R.id.iconItemSummary) FontTextView summary;
+    public class ViewHolder extends BaseViewHolder{
 
-        ViewHolder(View view) {ButterKnife.bind(this, view);}
+        @BindView(R.id.icon_image) AppCompatImageView iconImage;
+        @BindView(R.id.title_text) TextView titleText;
+        @BindView(R.id.desc_text) TextView descText;
+        @BindView(R.id.switch_bn) Switch switchBn;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+        }
     }
+
+    public interface ItemEventListener{
+        void onSwitchCheckedChanged(int position, boolean isChecked);
+    }
+
 }
