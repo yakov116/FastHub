@@ -168,14 +168,19 @@ class CommitCommentsPresenter extends BasePresenter<CommitCommentsMvp.View> impl
                 popupMenu.getMenu().findItem(R.id.edit).setVisible(isOwner);
                 popupMenu.setOnMenuItemClickListener(item1 -> {
                     if (getView() == null) return false;
-                    if (item1.getItemId() == R.id.delete) {
-                        getView().onShowDeleteMsg(item.getId());
-                    } else if (item1.getItemId() == R.id.reply) {
-                        getView().onReply(item.getUser(), item.getBody());
-                    } else if (item1.getItemId() == R.id.edit) {
-                        getView().onEditComment(item);
-                    } else if (item1.getItemId() == R.id.share) {
-                        ActivityHelper.shareUrl(v.getContext(), item.getHtmlUrl());
+                    switch (item1.getItemId()) {
+                        case R.id.delete:
+                            getView().onShowDeleteMsg(item.getId());
+                            break;
+                        case R.id.reply:
+                            getView().onReply(item.getUser(), item.getBody());
+                            break;
+                        case R.id.edit:
+                            getView().onEditComment(item);
+                            break;
+                        case R.id.share:
+                            ActivityHelper.shareUrl(v.getContext(), item.getHtmlUrl());
+                            break;
                     }
                     return true;
                 });

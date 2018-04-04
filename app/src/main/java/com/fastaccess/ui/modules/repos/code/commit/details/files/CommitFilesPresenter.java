@@ -83,9 +83,7 @@ class CommitFilesPresenter extends BasePresenter<CommitFilesMvp.View> implements
                 manageObservable(Observable.just(commitFiles)
                         .map(CommitFileChanges::construct)
                         .doOnSubscribe(disposable -> sendToView(CommitFilesMvp.View::clearAdapter))
-                        .doOnNext(commitFileChanges -> {
-                            sendToView(view -> view.onNotifyAdapter(commitFileChanges));
-                        })
+                        .doOnNext(commitFileChanges -> sendToView(view -> view.onNotifyAdapter(commitFileChanges)))
                         .doOnComplete(() -> sendToView(BaseMvp.FAView::hideProgress)));
             }
         } else {

@@ -95,16 +95,17 @@ public class MainActivity extends BaseActivity<MainMvp.View, MainPresenter> impl
     }
 
     @Override public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            if (drawer != null) drawer.openDrawer(GravityCompat.START);
-            return true;
-        } else if (item.getItemId() == R.id.search) {
-            startActivity(new Intent(this, SearchActivity.class));
-            return true;
-        } else if (item.getItemId() == R.id.notifications) {
-            ViewHelper.tintDrawable(item.setIcon(R.drawable.ic_notifications_none).getIcon(), ViewHelper.getIconColor(this));
-            startActivity(new Intent(this, NotificationActivity.class));
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (drawer != null) drawer.openDrawer(GravityCompat.START);
+                return true;
+            case R.id.search:
+                startActivity(new Intent(this, SearchActivity.class));
+                return true;
+            case R.id.notifications:
+                ViewHelper.tintDrawable(item.setIcon(R.drawable.ic_notifications_none).getIcon(), ViewHelper.getIconColor(this));
+                startActivity(new Intent(this, NotificationActivity.class));
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -152,23 +153,27 @@ public class MainActivity extends BaseActivity<MainMvp.View, MainPresenter> impl
     @Override public void onScrollTop(int index) {
         super.onScrollTop(index);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        if (index == 0) {
-            FeedsFragment homeView = (FeedsFragment) getFragmentByTag(fragmentManager, FeedsFragment.TAG);
-            if (homeView != null) {
-                homeView.onScrollTop(index);
-            }
-        } else if (index == 1) {
-            MyIssuesPagerFragment issuesView = (MyIssuesPagerFragment) getFragmentByTag
-                    (fragmentManager, MyIssuesPagerFragment.TAG);
-            if (issuesView != null) {
-                issuesView.onScrollTop(index);
-            }
-        } else if (index == 2) {
-            MyPullsPagerFragment pullRequestView = (MyPullsPagerFragment) getFragmentByTag
-                    (fragmentManager, MyPullsPagerFragment.TAG);
-            if (pullRequestView != null) {
-                pullRequestView.onScrollTop(0);
-            }
+        switch (index) {
+            case 0:
+                FeedsFragment homeView = (FeedsFragment) getFragmentByTag(fragmentManager, FeedsFragment.TAG);
+                if (homeView != null) {
+                    homeView.onScrollTop(index);
+                }
+                break;
+            case 1:
+                MyIssuesPagerFragment issuesView = (MyIssuesPagerFragment) getFragmentByTag
+                        (fragmentManager, MyIssuesPagerFragment.TAG);
+                if (issuesView != null) {
+                    issuesView.onScrollTop(index);
+                }
+                break;
+            case 2:
+                MyPullsPagerFragment pullRequestView = (MyPullsPagerFragment) getFragmentByTag
+                        (fragmentManager, MyPullsPagerFragment.TAG);
+                if (pullRequestView != null) {
+                    pullRequestView.onScrollTop(0);
+                }
+                break;
         }
     }
 

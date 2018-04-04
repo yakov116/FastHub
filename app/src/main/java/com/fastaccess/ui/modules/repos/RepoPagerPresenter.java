@@ -111,10 +111,8 @@ class RepoPagerPresenter extends BasePresenter<RepoPagerMvp.View> implements Rep
     }
 
     @Override public boolean isRepoOwner() {
-        if (getRepo() != null && getRepo().getOwner() != null) {
-            return getRepo().getOwner().getLogin().equals(Login.getUser().getLogin()) || isCollaborator;
-        }
-        return false;
+        return getRepo() != null && getRepo().getOwner() != null && (getRepo().getOwner().getLogin().equals(Login.getUser().getLogin()) ||
+                isCollaborator);
     }
 
     @Override public void onWatch() {

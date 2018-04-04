@@ -196,76 +196,78 @@ public class PullRequestPagerActivity extends BaseActivity<PullRequestPagerMvp.V
         }
         PullRequest pullRequest = getPresenter().getPullRequest();
         if (pullRequest == null) return false;
-        if (item.getItemId() == R.id.share) {
-            ActivityHelper.shareUrl(this, pullRequest.getHtmlUrl());
-            return true;
-        } else if (item.getItemId() == R.id.closeIssue) {
-            MessageDialogView.newInstance(
-                    pullRequest.getState() == IssueState.open ? getString(R.string.close_issue) : getString(R.string.re_open_issue),
-                    getString(R.string.confirm_message), Bundler.start().put(BundleConstant.EXTRA, true).end())
-                    .show(getSupportFragmentManager(), MessageDialogView.TAG);
-            return true;
-        } else if (item.getItemId() == R.id.lockIssue) {
-            if (!getPresenter().isLocked()) {
-                LockIssuePrBottomSheetDialog.Companion
-                        .newInstance()
+        switch (item.getItemId()) {
+            case R.id.share:
+                ActivityHelper.shareUrl(this, pullRequest.getHtmlUrl());
+                return true;
+            case R.id.closeIssue:
+                MessageDialogView.newInstance(
+                        pullRequest.getState() == IssueState.open ? getString(R.string.close_issue) : getString(R.string.re_open_issue),
+                        getString(R.string.confirm_message), Bundler.start().put(BundleConstant.EXTRA, true).end())
                         .show(getSupportFragmentManager(), MessageDialogView.TAG);
-            } else {
-                MessageDialogView.newInstance(getString(R.string.unlock_issue), getString(R.string.unlock_issue_details),
-                        Bundler.start().put(BundleConstant.EXTRA_TWO, true)
-                                .put(BundleConstant.YES_NO_EXTRA, true)
-                                .end())
-                        .show(getSupportFragmentManager(), MessageDialogView.TAG);
-            }
-            return true;
-        } else if (item.getItemId() == R.id.labels) {
-            LabelsDialogFragment.newInstance(getPresenter().getPullRequest() != null ? getPresenter().getPullRequest().getLabels() : null,
-                    getPresenter().getRepoId(), getPresenter().getLogin())
-                    .show(getSupportFragmentManager(), "LabelsDialogFragment");
-            return true;
-        } else if (item.getItemId() == R.id.edit) {
-            CreateIssueActivity.startForResult(this, getPresenter().getLogin(), getPresenter().getRepoId(), pullRequest, isEnterprise());
-            return true;
-        } else if (item.getItemId() == R.id.milestone) {
-            MilestoneDialogFragment.newInstance(getPresenter().getLogin(), getPresenter().getRepoId())
-                    .show(getSupportFragmentManager(), "MilestoneDialogFragment");
-            return true;
-        } else if (item.getItemId() == R.id.assignees) {
-            AssigneesDialogFragment.newInstance(getPresenter().getLogin(), getPresenter().getRepoId(), true)
-                    .show(getSupportFragmentManager(), "AssigneesDialogFragment");
-            return true;
-        } else if (item.getItemId() == R.id.reviewers) {
-            AssigneesDialogFragment.newInstance(getPresenter().getLogin(), getPresenter().getRepoId(), false)
-                    .show(getSupportFragmentManager(), "AssigneesDialogFragment");
-            return true;
-        } else if (item.getItemId() == R.id.merge) {
-            if (getPresenter().getPullRequest() != null) {
-                String msg = getPresenter().getPullRequest().getTitle();
-                MergePullRequestDialogFragment.newInstance(msg).show(getSupportFragmentManager(), "MergePullRequestDialogFragment");
-            }
-        } else if (item.getItemId() == R.id.browser) {
-            ActivityHelper.startCustomTab(this, pullRequest.getHtmlUrl());
-            return true;
-        } else if (item.getItemId() == R.id.reviewChanges) {
-            if (PrefGetter.isProEnabled()) {
-                addPrReview(item.getActionView() == null ? title : item.getActionView());
-            } else {
-                PremiumActivity.Companion.startActivity(this);
-            }
-            return true;
-        } else if (item.getItemId() == R.id.subscribe) {
-            getPresenter().onSubscribeOrMute(false);
-            return true;
-        } else if (item.getItemId() == R.id.mute) {
-            getPresenter().onSubscribeOrMute(true);
-            return true;
-        } else if (item.getItemId() == R.id.pinUnpin) {
-            if (PrefGetter.isProEnabled()) {
-                getPresenter().onPinUnpinPullRequest();
-            } else {
-                PremiumActivity.Companion.startActivity(this);
-            }
-            return true;
+                return true;
+            case R.id.lockIssue:
+                if (!getPresenter().isLocked()) {
+                    LockIssuePrBottomSheetDialog.Companion
+                            .newInstance()
+                            .show(getSupportFragmentManager(), MessageDialogView.TAG);
+                } else {
+                    MessageDialogView.newInstance(getString(R.string.unlock_issue), getString(R.string.unlock_issue_details),
+                            Bundler.start().put(BundleConstant.EXTRA_TWO, true)
+                                    .put(BundleConstant.YES_NO_EXTRA, true)
+                                    .end())
+                            .show(getSupportFragmentManager(), MessageDialogView.TAG);
+                }
+                return true;
+            case R.id.labels:
+                LabelsDialogFragment.newInstance(getPresenter().getPullRequest() != null ? getPresenter().getPullRequest().getLabels() : null,
+                        getPresenter().getRepoId(), getPresenter().getLogin())
+                        .show(getSupportFragmentManager(), "LabelsDialogFragment");
+                return true;
+            case R.id.edit:
+                CreateIssueActivity.startForResult(this, getPresenter().getLogin(), getPresenter().getRepoId(), pullRequest, isEnterprise());
+                return true;
+            case R.id.milestone:
+                MilestoneDialogFragment.newInstance(getPresenter().getLogin(), getPresenter().getRepoId())
+                        .show(getSupportFragmentManager(), "MilestoneDialogFragment");
+                return true;
+            case R.id.assignees:
+                AssigneesDialogFragment.newInstance(getPresenter().getLogin(), getPresenter().getRepoId(), true)
+                        .show(getSupportFragmentManager(), "AssigneesDialogFragment");
+                return true;
+            case R.id.reviewers:
+                AssigneesDialogFragment.newInstance(getPresenter().getLogin(), getPresenter().getRepoId(), false)
+                        .show(getSupportFragmentManager(), "AssigneesDialogFragment");
+                return true;
+            case R.id.merge:
+                if (getPresenter().getPullRequest() != null) {
+                    String msg = getPresenter().getPullRequest().getTitle();
+                    MergePullRequestDialogFragment.newInstance(msg).show(getSupportFragmentManager(), "MergePullRequestDialogFragment");
+                }
+                break;
+            case R.id.browser:
+                ActivityHelper.startCustomTab(this, pullRequest.getHtmlUrl());
+                return true;
+            case R.id.reviewChanges:
+                if (PrefGetter.isProEnabled()) {
+                    addPrReview(item.getActionView() == null ? title : item.getActionView());
+                } else {
+                    PremiumActivity.Companion.startActivity(this);
+                }
+                return true;
+            case R.id.subscribe:
+                getPresenter().onSubscribeOrMute(false);
+                return true;
+            case R.id.mute:
+                getPresenter().onSubscribeOrMute(true);
+                return true;
+            case R.id.pinUnpin:
+                if (PrefGetter.isProEnabled()) {
+                    getPresenter().onPinUnpinPullRequest();
+                } else {
+                    PremiumActivity.Companion.startActivity(this);
+                }
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

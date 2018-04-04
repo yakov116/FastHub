@@ -165,24 +165,29 @@ public class RepoPagerActivity extends BaseActivity<RepoPagerMvp.View, RepoPager
     }
 
     @OnClick(R.id.fab) void onFabClicked() {
-        if (navType == RepoPagerMvp.ISSUES) {
-            fab.hide(new FloatingActionButton.OnVisibilityChangedListener() {
-                @Override public void onHidden(FloatingActionButton fab) {
-                    super.onHidden(fab);
-                    if (appbar != null) appbar.setExpanded(false, true);
-                    bottomNavigation.setExpanded(false, true);
-                    AnimHelper.mimicFabVisibility(true, filterLayout, null);
+        switch (navType) {
+            case RepoPagerMvp.ISSUES:
+                fab.hide(new FloatingActionButton.OnVisibilityChangedListener() {
+                    @Override public void onHidden(FloatingActionButton fab) {
+                        super.onHidden(fab);
+                        if (appbar != null) appbar.setExpanded(false, true);
+                        bottomNavigation.setExpanded(false, true);
+                        AnimHelper.mimicFabVisibility(true, filterLayout, null);
+                    }
+                });
+                break;
+            case RepoPagerMvp.PULL_REQUEST:
+                RepoPullRequestPagerFragment pullRequestPagerView = (RepoPullRequestPagerFragment) AppHelper.getFragmentByTag
+                        (getSupportFragmentManager(),
+                        RepoPullRequestPagerFragment.TAG);
+                if (pullRequestPagerView != null) {
+                    FilterIssuesActivity.startActivity(this, getPresenter().login(), getPresenter().repoId(), false,
+                            pullRequestPagerView.getCurrentItem() == 0, isEnterprise());
                 }
-            });
-        } else if (navType == RepoPagerMvp.PULL_REQUEST) {
-            RepoPullRequestPagerFragment pullRequestPagerView = (RepoPullRequestPagerFragment) AppHelper.getFragmentByTag(getSupportFragmentManager(),
-                    RepoPullRequestPagerFragment.TAG);
-            if (pullRequestPagerView != null) {
-                FilterIssuesActivity.startActivity(this, getPresenter().login(), getPresenter().repoId(), false,
-                        pullRequestPagerView.getCurrentItem() == 0, isEnterprise());
-            }
-        } else {
-            fab.hide();
+                break;
+            default:
+                fab.hide();
+                break;
         }
     }
 
@@ -534,30 +539,32 @@ public class RepoPagerActivity extends BaseActivity<RepoPagerMvp.View, RepoPager
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        } else if (item.getItemId() == R.id.share) {
-            if (getPresenter().getRepo() != null) ActivityHelper.shareUrl(this, getPresenter().getRepo().getHtmlUrl());
-            return true;
-        } else if (item.getItemId() == R.id.browser) {
-            if (getPresenter().getRepo() != null) ActivityHelper.startCustomTab(this, getPresenter().getRepo().getHtmlUrl());
-            return true;
-        } else if (item.getItemId() == R.id.copy) {
-            if (getPresenter().getRepo() != null) AppHelper.copyToClipboard(this, getPresenter().getRepo().getHtmlUrl());
-            return true;
-        } else if (item.getItemId() == R.id.originalRepo) {
-            if (getPresenter().getRepo() != null && getPresenter().getRepo().getParent() != null) {
-                Repo parent = getPresenter().getRepo().getParent();
-                SchemeParser.launchUri(this, parent.getHtmlUrl());
-            }
-            return true;
-        } else if (item.getItemId() == R.id.deleteRepo) {
-            MessageDialogView.newInstance(getString(R.string.delete_repo), getString(R.string.delete_repo_warning),
-                    Bundler.start().put(BundleConstant.EXTRA_TWO, true)
-                            .put(BundleConstant.YES_NO_EXTRA, true)
-                            .end()).show(getSupportFragmentManager(), MessageDialogView.TAG);
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+                break;
+            case R.id.share:
+                if (getPresenter().getRepo() != null) ActivityHelper.shareUrl(this, getPresenter().getRepo().getHtmlUrl());
+                return true;
+            case R.id.browser:
+                if (getPresenter().getRepo() != null) ActivityHelper.startCustomTab(this, getPresenter().getRepo().getHtmlUrl());
+                return true;
+            case R.id.copy:
+                if (getPresenter().getRepo() != null) AppHelper.copyToClipboard(this, getPresenter().getRepo().getHtmlUrl());
+                return true;
+            case R.id.originalRepo:
+                if (getPresenter().getRepo() != null && getPresenter().getRepo().getParent() != null) {
+                    Repo parent = getPresenter().getRepo().getParent();
+                    SchemeParser.launchUri(this, parent.getHtmlUrl());
+                }
+                return true;
+            case R.id.deleteRepo:
+                MessageDialogView.newInstance(getString(R.string.delete_repo), getString(R.string.delete_repo_warning),
+                        Bundler.start().put(BundleConstant.EXTRA_TWO, true)
+                                .put(BundleConstant.YES_NO_EXTRA, true)
+                                .end()).show(getSupportFragmentManager(), MessageDialogView.TAG);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -616,15 +623,19 @@ public class RepoPagerActivity extends BaseActivity<RepoPagerMvp.View, RepoPager
     }
 
     private void showHideFab() {
-        if (navType == RepoPagerMvp.ISSUES) {
-            fab.setImageResource(R.drawable.ic_menu);
-            fab.show();
-            if (!PrefGetter.isRepoFabHintShowed()) {}
-        } else if (navType == RepoPagerMvp.PULL_REQUEST) {
-            fab.setImageResource(R.drawable.ic_search);
-            fab.show();
-        } else {
-            fab.hide();
+        switch (navType) {
+            case RepoPagerMvp.ISSUES:
+                fab.setImageResource(R.drawable.ic_menu);
+                fab.show();
+                if (!PrefGetter.isRepoFabHintShowed()) {}
+                break;
+            case RepoPagerMvp.PULL_REQUEST:
+                fab.setImageResource(R.drawable.ic_search);
+                fab.show();
+                break;
+            default:
+                fab.hide();
+                break;
         }
     }
 

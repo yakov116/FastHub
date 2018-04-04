@@ -165,21 +165,22 @@ public class GistActivity extends BaseActivity<GistMvp.View, GistPresenter>
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.share) {
-            if (getPresenter().getGist() != null) ActivityHelper.shareUrl(this, getPresenter().getGist().getHtmlUrl());
-            return true;
-        } else if (item.getItemId() == R.id.deleteGist) {
-            MessageDialogView.newInstance(
-                    getString(R.string.delete_gist), getString(R.string.confirm_message),
-                    Bundler.start()
-                            .put(BundleConstant.YES_NO_EXTRA, true)
-                            .put(BundleConstant.EXTRA, true).end())
-                    .show(getSupportFragmentManager(), MessageDialogView.TAG);
-            return true;
-        } else if (item.getItemId() == android.R.id.home) {
-            GistsListActivity.startActivity(this);
-            finish();
-            return true;
+        switch (item.getItemId()) {
+            case R.id.share:
+                if (getPresenter().getGist() != null) ActivityHelper.shareUrl(this, getPresenter().getGist().getHtmlUrl());
+                return true;
+            case R.id.deleteGist:
+                MessageDialogView.newInstance(
+                        getString(R.string.delete_gist), getString(R.string.confirm_message),
+                        Bundler.start()
+                                .put(BundleConstant.YES_NO_EXTRA, true)
+                                .put(BundleConstant.EXTRA, true).end())
+                        .show(getSupportFragmentManager(), MessageDialogView.TAG);
+                return true;
+            case android.R.id.home:
+                GistsListActivity.startActivity(this);
+                finish();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

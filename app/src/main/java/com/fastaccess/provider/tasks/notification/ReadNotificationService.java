@@ -92,15 +92,20 @@ public class ReadNotificationService extends IntentService {
         if (intent != null && intent.getExtras() != null) {
             Bundle bundle = intent.getExtras();
             int type = bundle.getInt(BundleConstant.EXTRA_TYPE);
-            if (type == READ_SINGLE) {
-                markSingleAsRead(bundle.getLong(BundleConstant.ID));
-            } else if (type == READ_ALL) {
-                markMultiAsRead(bundle.getLongArray(BundleConstant.ID));
-            } else if (type == OPEN_NOTIFICATION) {
-                openNotification(bundle.getLong(BundleConstant.ID), bundle.getString(BundleConstant.EXTRA),
-                        bundle.getBoolean(BundleConstant.YES_NO_EXTRA));
-            } else if (type == UN_SUBSCRIBE) {
-                unSubscribeFromThread(bundle.getLong(BundleConstant.ID));
+            switch (type) {
+                case READ_SINGLE:
+                    markSingleAsRead(bundle.getLong(BundleConstant.ID));
+                    break;
+                case READ_ALL:
+                    markMultiAsRead(bundle.getLongArray(BundleConstant.ID));
+                    break;
+                case OPEN_NOTIFICATION:
+                    openNotification(bundle.getLong(BundleConstant.ID), bundle.getString(BundleConstant.EXTRA),
+                            bundle.getBoolean(BundleConstant.YES_NO_EXTRA));
+                    break;
+                case UN_SUBSCRIBE:
+                    unSubscribeFromThread(bundle.getLong(BundleConstant.ID));
+                    break;
             }
         }
     }

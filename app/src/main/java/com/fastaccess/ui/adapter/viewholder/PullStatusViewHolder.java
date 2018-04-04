@@ -49,33 +49,37 @@ public class PullStatusViewHolder extends BaseViewHolder<PullRequestStatusModel>
             stateImage.setImageResource(stateType.getDrawableRes());
             String mergeableState = pullRequestStatusModel.getMergeableState();
             boolean isBlocked = "blocked".equalsIgnoreCase(mergeableState);
-            if (stateType == StatusStateType.failure) {
-                stateImage.tintDrawableColor(red);
-                if (pullRequestStatusModel.isMergable()) {
-                    status.setText(R.string.checks_failed);
-                } else {
-                    status.setText(SpannableBuilder.builder()
-                            .append(status.getResources().getString(R.string.checks_failed))
-                            .append("\n")
-                            .append(status.getResources().getString(R.string.can_not_merge_pr)));
-                }
-            } else if (stateType == StatusStateType.pending) {
-                if (pullRequestStatusModel.isMergable()) {
-                    stateImage.setImageResource(R.drawable.ic_check_small);
+            switch (stateType) {
+                case failure:
+                    stateImage.tintDrawableColor(red);
+                    if (pullRequestStatusModel.isMergable()) {
+                        status.setText(R.string.checks_failed);
+                    } else {
+                        status.setText(SpannableBuilder.builder()
+                                .append(status.getResources().getString(R.string.checks_failed))
+                                .append("\n")
+                                .append(status.getResources().getString(R.string.can_not_merge_pr)));
+                    }
+                    break;
+                case pending:
+                    if (pullRequestStatusModel.isMergable()) {
+                        stateImage.setImageResource(R.drawable.ic_check_small);
+                        stateImage.tintDrawableColor(green);
+                        status.setText(!isBlocked ? R.string.commit_can_be_merged : R.string.can_not_merge_pr);
+                    } else {
+                        stateImage.setImageResource(stateType.getDrawableRes());
+                        stateImage.tintDrawableColor(indigo);
+                        status.setText(R.string.checks_pending);
+                    }
+                    break;
+                default:
                     stateImage.tintDrawableColor(green);
-                    status.setText(!isBlocked ? R.string.commit_can_be_merged : R.string.can_not_merge_pr);
-                } else {
-                    stateImage.setImageResource(stateType.getDrawableRes());
-                    stateImage.tintDrawableColor(indigo);
-                    status.setText(R.string.checks_pending);
-                }
-            } else {
-                stateImage.tintDrawableColor(green);
-                if (pullRequestStatusModel.isMergable()) {
-                    status.setText(!isBlocked ? R.string.commit_can_be_merged : R.string.can_not_merge_pr);
-                } else {
-                    status.setText(R.string.checks_passed);
-                }
+                    if (pullRequestStatusModel.isMergable()) {
+                        status.setText(!isBlocked ? R.string.commit_can_be_merged : R.string.can_not_merge_pr);
+                    } else {
+                        status.setText(R.string.checks_passed);
+                    }
+                    break;
             }
         }
         if (pullRequestStatusModel.getStatuses() != null && !pullRequestStatusModel.getStatuses().isEmpty()) {

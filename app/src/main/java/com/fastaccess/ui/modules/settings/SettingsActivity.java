@@ -70,14 +70,19 @@ public class SettingsActivity extends BaseActivity implements LanguageBottomShee
                     .put(BundleConstant.ITEM, settingsModel.getSettingsType())
                     .put(BundleConstant.EXTRA, settingsModel.getTitle())
                     .end());
-            if (settingsModel.getSettingsType() == SettingsModel.LANGUAGE) {
-                showLanguageList();
-            } else if (settingsModel.getSettingsType() == SettingsModel.THEME) {
-                ActivityHelper.startReveal(this, new Intent(this, ThemeActivity.class), view, THEME_CHANGE);
-            } else if (settingsModel.getSettingsType() == SettingsModel.CODE_THEME) {
-                ActivityHelper.startReveal(this, new Intent(this, ThemeCodeActivity.class), view, THEME_CHANGE);
-            } else {
-                ActivityHelper.startReveal(this, intent, view);
+            switch (settingsModel.getSettingsType()) {
+                case SettingsModel.LANGUAGE:
+                    showLanguageList();
+                    break;
+                case SettingsModel.THEME:
+                    ActivityHelper.startReveal(this, new Intent(this, ThemeActivity.class), view, THEME_CHANGE);
+                    break;
+                case SettingsModel.CODE_THEME:
+                    ActivityHelper.startReveal(this, new Intent(this, ThemeCodeActivity.class), view, THEME_CHANGE);
+                    break;
+                default:
+                    ActivityHelper.startReveal(this, intent, view);
+                    break;
             }
         });
     }

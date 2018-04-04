@@ -125,12 +125,16 @@ class GistCommentsPresenter extends BasePresenter<GistCommentsMvp.View> implemen
             popupMenu.getMenu().findItem(R.id.edit).setVisible(username.equalsIgnoreCase(item.getUser().getLogin()));
             popupMenu.setOnMenuItemClickListener(item1 -> {
                 if (getView() == null) return false;
-                if (item1.getItemId() == R.id.delete) {
-                    getView().onShowDeleteMsg(item.getId());
-                } else if (item1.getItemId() == R.id.reply) {
-                    getView().onReply(item.getUser(), item.getBody());
-                } else if (item1.getItemId() == R.id.edit) {
-                    getView().onEditComment(item);
+                switch (item1.getItemId()) {
+                    case R.id.delete:
+                        getView().onShowDeleteMsg(item.getId());
+                        break;
+                    case R.id.reply:
+                        getView().onReply(item.getUser(), item.getBody());
+                        break;
+                    case R.id.edit:
+                        getView().onEditComment(item);
+                        break;
                 }
                 return true;
             });

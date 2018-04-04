@@ -56,21 +56,22 @@ public class IssuesTimelineAdapter extends BaseRecyclerAdapter<TimelineModel, Ba
     }
 
     @Override protected BaseViewHolder viewHolder(ViewGroup parent, int viewType) {
-        if (viewType == 0) {
-            return new UnknownTypeViewHolder(BaseViewHolder.getView(parent, R.layout.unknown_row_item));
-        } else if (viewType == TimelineModel.HEADER) {
-            return IssueDetailsViewHolder.newInstance(parent, this, onToggleView, reactionsCallback, repoOwner, poster);
-        } else if (viewType == TimelineModel.EVENT) {
-            return IssueTimelineViewHolder.newInstance(parent, this, isMerged);
-        } else if (viewType == TimelineModel.REVIEW) {
-            return ReviewsViewHolder.Companion.newInstance(parent, this);
-        } else if (viewType == TimelineModel.GROUP) {
-            return GroupedReviewsViewHolder.newInstance(parent, this, onToggleView, reactionsCallback,
-                    reviewCommentCallback, repoOwner, poster);
-        } else if (viewType == TimelineModel.COMMIT_COMMENTS) {
-            return CommitThreadViewHolder.Companion.newInstance(parent, this, onToggleView);
-        } else if (viewType == TimelineModel.STATUS) {
-            return PullStatusViewHolder.newInstance(parent);
+        switch (viewType) {
+            case 0:
+                return new UnknownTypeViewHolder(BaseViewHolder.getView(parent, R.layout.unknown_row_item));
+            case TimelineModel.HEADER:
+                return IssueDetailsViewHolder.newInstance(parent, this, onToggleView, reactionsCallback, repoOwner, poster);
+            case TimelineModel.EVENT:
+                return IssueTimelineViewHolder.newInstance(parent, this, isMerged);
+            case TimelineModel.REVIEW:
+                return ReviewsViewHolder.Companion.newInstance(parent, this);
+            case TimelineModel.GROUP:
+                return GroupedReviewsViewHolder.newInstance(parent, this, onToggleView, reactionsCallback,
+                        reviewCommentCallback, repoOwner, poster);
+            case TimelineModel.COMMIT_COMMENTS:
+                return CommitThreadViewHolder.Companion.newInstance(parent, this, onToggleView);
+            case TimelineModel.STATUS:
+                return PullStatusViewHolder.newInstance(parent);
         }
         return TimelineCommentsViewHolder.newInstance(parent, this, onToggleView, showEmojies,
                 reactionsCallback, repoOwner, poster);

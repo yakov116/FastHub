@@ -23,12 +23,16 @@ public class GistFilesListPresenter extends BasePresenter<GistFilesListMvp.View>
 
     @Override public void onItemClick(int position, View v, FilesListModel item) {
         if (getView() != null) {
-            if (v.getId() == R.id.delete) {
-                getView().onDeleteFile(item, position);
-            } else if (v.getId() == R.id.edit) {
-                getView().onEditFile(item, position);
-            } else {
-                getView().onOpenFile(item, position);
+            switch (v.getId()) {
+                case R.id.delete:
+                    getView().onDeleteFile(item, position);
+                    break;
+                case R.id.edit:
+                    getView().onEditFile(item, position);
+                    break;
+                default:
+                    getView().onOpenFile(item, position);
+                    break;
             }
         }
     }

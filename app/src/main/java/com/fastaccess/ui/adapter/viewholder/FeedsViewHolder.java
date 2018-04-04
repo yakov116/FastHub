@@ -68,58 +68,85 @@ public class FeedsViewHolder extends BaseViewHolder<Event> {
         description.setVisibility(View.GONE);
         if (eventsModel.getType() != null) {
             EventsType type = eventsModel.getType();
-            if (type == EventsType.WatchEvent) {
-                appendWatch(spannableBuilder, type, eventsModel);
-            } else if (type == EventsType.CreateEvent) {
-                appendCreateEvent(spannableBuilder, eventsModel);
-            } else if (type == EventsType.CommitCommentEvent) {
-                appendCommitComment(spannableBuilder, eventsModel);
-            } else if (type == EventsType.DownloadEvent) {
-                appendDownloadEvent(spannableBuilder, eventsModel);
-            } else if (type == EventsType.FollowEvent) {
-                appendFollowEvent(spannableBuilder, eventsModel);
-            } else if (type == EventsType.ForkEvent) {
-                appendForkEvent(spannableBuilder, eventsModel);
-            } else if (type == EventsType.GistEvent) {
-                appendGistEvent(spannableBuilder, eventsModel);
-            } else if (type == EventsType.GollumEvent) {
-                appendGollumEvent(spannableBuilder, eventsModel);
-            } else if (type == EventsType.IssueCommentEvent) {
-                appendIssueCommentEvent(spannableBuilder, eventsModel);
-            } else if (type == EventsType.IssuesEvent) {
-                appendIssueEvent(spannableBuilder, eventsModel);
-            } else if (type == EventsType.MemberEvent) {
-                appendMemberEvent(spannableBuilder, eventsModel);
-            } else if (type == EventsType.PublicEvent) {
-                appendPublicEvent(spannableBuilder, eventsModel);
-            } else if (type == EventsType.PullRequestEvent) {
-                appendPullRequestEvent(spannableBuilder, eventsModel);
-            } else if (type == EventsType.PullRequestReviewCommentEvent) {
-                appendPullRequestReviewCommentEvent(spannableBuilder, eventsModel);
-            } else if (type == EventsType.PullRequestReviewEvent) {
-                appendPullRequestReviewCommentEvent(spannableBuilder, eventsModel);
-            } else if (type == EventsType.RepositoryEvent) {
-                appendPublicEvent(spannableBuilder, eventsModel);
-            } else if (type == EventsType.PushEvent) {
-                appendPushEvent(spannableBuilder, eventsModel);
-            } else if (type == EventsType.TeamAddEvent) {
-                appendTeamEvent(spannableBuilder, eventsModel);
-            } else if (type == EventsType.DeleteEvent) {
-                appendDeleteEvent(spannableBuilder, eventsModel);
-            } else if (type == EventsType.ReleaseEvent) {
-                appendReleaseEvent(spannableBuilder, eventsModel);
-            } else if (type == EventsType.ForkApplyEvent) {
-                appendForkApplyEvent(spannableBuilder, eventsModel);
-            } else if (type == EventsType.OrgBlockEvent) {
-                appendOrgBlockEvent(spannableBuilder, eventsModel);
-            } else if (type == EventsType.ProjectCardEvent) {
-                appendProjectCardEvent(spannableBuilder, eventsModel, false);
-            } else if (type == EventsType.ProjectColumnEvent) {
-                appendProjectCardEvent(spannableBuilder, eventsModel, true);
-            } else if (type == EventsType.OrganizationEvent) {
-                appendOrganizationEvent(spannableBuilder, eventsModel);
-            } else if (type == EventsType.ProjectEvent) {
-                appendProjectCardEvent(spannableBuilder, eventsModel, false);
+            switch (type) {
+                case WatchEvent:
+                    appendWatch(spannableBuilder, type, eventsModel);
+                    break;
+                case CreateEvent:
+                    appendCreateEvent(spannableBuilder, eventsModel);
+                    break;
+                case CommitCommentEvent:
+                    appendCommitComment(spannableBuilder, eventsModel);
+                    break;
+                case DownloadEvent:
+                    appendDownloadEvent(spannableBuilder, eventsModel);
+                    break;
+                case FollowEvent:
+                    appendFollowEvent(spannableBuilder, eventsModel);
+                    break;
+                case ForkEvent:
+                    appendForkEvent(spannableBuilder, eventsModel);
+                    break;
+                case GistEvent:
+                    appendGistEvent(spannableBuilder, eventsModel);
+                    break;
+                case GollumEvent:
+                    appendGollumEvent(spannableBuilder, eventsModel);
+                    break;
+                case IssueCommentEvent:
+                    appendIssueCommentEvent(spannableBuilder, eventsModel);
+                    break;
+                case IssuesEvent:
+                    appendIssueEvent(spannableBuilder, eventsModel);
+                    break;
+                case MemberEvent:
+                    appendMemberEvent(spannableBuilder, eventsModel);
+                    break;
+                case PublicEvent:
+                    appendPublicEvent(spannableBuilder, eventsModel);
+                    break;
+                case PullRequestEvent:
+                    appendPullRequestEvent(spannableBuilder, eventsModel);
+                    break;
+                case PullRequestReviewCommentEvent:
+                    appendPullRequestReviewCommentEvent(spannableBuilder, eventsModel);
+                    break;
+                case PullRequestReviewEvent:
+                    appendPullRequestReviewCommentEvent(spannableBuilder, eventsModel);
+                    break;
+                case RepositoryEvent:
+                    appendPublicEvent(spannableBuilder, eventsModel);
+                    break;
+                case PushEvent:
+                    appendPushEvent(spannableBuilder, eventsModel);
+                    break;
+                case TeamAddEvent:
+                    appendTeamEvent(spannableBuilder, eventsModel);
+                    break;
+                case DeleteEvent:
+                    appendDeleteEvent(spannableBuilder, eventsModel);
+                    break;
+                case ReleaseEvent:
+                    appendReleaseEvent(spannableBuilder, eventsModel);
+                    break;
+                case ForkApplyEvent:
+                    appendForkApplyEvent(spannableBuilder, eventsModel);
+                    break;
+                case OrgBlockEvent:
+                    appendOrgBlockEvent(spannableBuilder, eventsModel);
+                    break;
+                case ProjectCardEvent:
+                    appendProjectCardEvent(spannableBuilder, eventsModel, false);
+                    break;
+                case ProjectColumnEvent:
+                    appendProjectCardEvent(spannableBuilder, eventsModel, true);
+                    break;
+                case OrganizationEvent:
+                    appendOrganizationEvent(spannableBuilder, eventsModel);
+                    break;
+                case ProjectEvent:
+                    appendProjectCardEvent(spannableBuilder, eventsModel, false);
+                    break;
             }
             date.setGravity(Gravity.CENTER);
             date.setEventsIcon(type.getDrawableRes());

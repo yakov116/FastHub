@@ -70,7 +70,7 @@ object TimelineConverter {
                             list.add(timeline)
                         }
                     } else if (type == IssueEventType.reviewed || type == IssueEventType
-                            .changes_requested) {
+                                    .changes_requested) {
                         val review = getReview(jsonObject, gson)
                         if (review != null) {
                             timeline.review = review
@@ -108,7 +108,7 @@ object TimelineConverter {
                 list.add(timeline)
             }
         }
-        return list.filter({filterEvents(it.event)})
+        return list.filter({ filterEvents(it.event) })
     }
 
     private fun getCommit(jsonObject: JsonObject, gson: Gson): PullRequestCommitModel? {

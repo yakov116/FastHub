@@ -180,62 +180,63 @@ public class IssuePagerActivity extends BaseActivity<IssuePagerMvp.View, IssuePa
         }
         Issue issueModel = getPresenter().getIssue();
         if (issueModel == null) return false;
-        if (item.getItemId() == R.id.share) {
-            ActivityHelper.shareUrl(this, getPresenter().getIssue().getHtmlUrl());
-            return true;
-        } else if (item.getItemId() == R.id.closeIssue) {
-            MessageDialogView.newInstance(
-                    issueModel.getState() == IssueState.open ? getString(R.string.close_issue) : getString(R.string.re_open_issue),
-                    getString(R.string.confirm_message), Bundler.start().put(BundleConstant.EXTRA, true)
-                            .put(BundleConstant.YES_NO_EXTRA, true).end())
-                    .show(getSupportFragmentManager(), MessageDialogView.TAG);
-            return true;
-        } else if (item.getItemId() == R.id.lockIssue) {
-            if (!getPresenter().isLocked()) {
-                LockIssuePrBottomSheetDialog.Companion
-                        .newInstance()
+        switch (item.getItemId()) {
+            case R.id.share:
+                ActivityHelper.shareUrl(this, getPresenter().getIssue().getHtmlUrl());
+                return true;
+            case R.id.closeIssue:
+                MessageDialogView.newInstance(
+                        issueModel.getState() == IssueState.open ? getString(R.string.close_issue) : getString(R.string.re_open_issue),
+                        getString(R.string.confirm_message), Bundler.start().put(BundleConstant.EXTRA, true)
+                                .put(BundleConstant.YES_NO_EXTRA, true).end())
                         .show(getSupportFragmentManager(), MessageDialogView.TAG);
-            } else {
-                MessageDialogView.newInstance(getString(R.string.unlock_issue), getString(R.string.unlock_issue_details),
-                        Bundler.start().put(BundleConstant.EXTRA_TWO, true)
-                                .put(BundleConstant.YES_NO_EXTRA, true)
-                                .end())
-                        .show(getSupportFragmentManager(), MessageDialogView.TAG);
-            }
-            return true;
-        } else if (item.getItemId() == R.id.labels) {
-            LabelsDialogFragment.newInstance(getPresenter().getIssue() != null ? getPresenter().getIssue().getLabels() : null,
-                    getPresenter().getRepoId(), getPresenter().getLogin())
-                    .show(getSupportFragmentManager(), "LabelsDialogFragment");
-            return true;
-        } else if (item.getItemId() == R.id.edit) {
-            CreateIssueActivity.startForResult(this, getPresenter().getLogin(), getPresenter().getRepoId(),
-                    getPresenter().getIssue(), isEnterprise());
-            return true;
-        } else if (item.getItemId() == R.id.milestone) {
-            MilestoneDialogFragment.newInstance(getPresenter().getLogin(), getPresenter().getRepoId())
-                    .show(getSupportFragmentManager(), "MilestoneDialogFragment");
-            return true;
-        } else if (item.getItemId() == R.id.assignees) {
-            AssigneesDialogFragment.newInstance(getPresenter().getLogin(), getPresenter().getRepoId(), true)
-                    .show(getSupportFragmentManager(), "AssigneesDialogFragment");
-            return true;
-        } else if (item.getItemId() == R.id.subscribe) {
-            getPresenter().onSubscribeOrMute(false);
-            return true;
-        } else if (item.getItemId() == R.id.mute) {
-            getPresenter().onSubscribeOrMute(true);
-            return true;
-        } else if (item.getItemId() == R.id.browser) {
-            ActivityHelper.startCustomTab(this, issueModel.getHtmlUrl());
-            return true;
-        } else if (item.getItemId() == R.id.pinUnpin) {
-            if (PrefGetter.isProEnabled()) {
-                getPresenter().onPinUnpinIssue();
-            } else {
-                PremiumActivity.Companion.startActivity(this);
-            }
-            return true;
+                return true;
+            case R.id.lockIssue:
+                if (!getPresenter().isLocked()) {
+                    LockIssuePrBottomSheetDialog.Companion
+                            .newInstance()
+                            .show(getSupportFragmentManager(), MessageDialogView.TAG);
+                } else {
+                    MessageDialogView.newInstance(getString(R.string.unlock_issue), getString(R.string.unlock_issue_details),
+                            Bundler.start().put(BundleConstant.EXTRA_TWO, true)
+                                    .put(BundleConstant.YES_NO_EXTRA, true)
+                                    .end())
+                            .show(getSupportFragmentManager(), MessageDialogView.TAG);
+                }
+                return true;
+            case R.id.labels:
+                LabelsDialogFragment.newInstance(getPresenter().getIssue() != null ? getPresenter().getIssue().getLabels() : null,
+                        getPresenter().getRepoId(), getPresenter().getLogin())
+                        .show(getSupportFragmentManager(), "LabelsDialogFragment");
+                return true;
+            case R.id.edit:
+                CreateIssueActivity.startForResult(this, getPresenter().getLogin(), getPresenter().getRepoId(),
+                        getPresenter().getIssue(), isEnterprise());
+                return true;
+            case R.id.milestone:
+                MilestoneDialogFragment.newInstance(getPresenter().getLogin(), getPresenter().getRepoId())
+                        .show(getSupportFragmentManager(), "MilestoneDialogFragment");
+                return true;
+            case R.id.assignees:
+                AssigneesDialogFragment.newInstance(getPresenter().getLogin(), getPresenter().getRepoId(), true)
+                        .show(getSupportFragmentManager(), "AssigneesDialogFragment");
+                return true;
+            case R.id.subscribe:
+                getPresenter().onSubscribeOrMute(false);
+                return true;
+            case R.id.mute:
+                getPresenter().onSubscribeOrMute(true);
+                return true;
+            case R.id.browser:
+                ActivityHelper.startCustomTab(this, issueModel.getHtmlUrl());
+                return true;
+            case R.id.pinUnpin:
+                if (PrefGetter.isProEnabled()) {
+                    getPresenter().onPinUnpinIssue();
+                } else {
+                    PremiumActivity.Companion.startActivity(this);
+                }
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

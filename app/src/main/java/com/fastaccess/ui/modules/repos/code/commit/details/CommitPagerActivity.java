@@ -144,21 +144,22 @@ public class CommitPagerActivity extends BaseActivity<CommitPagerMvp.View, Commi
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onNavToRepoClicked();
-            return true;
-        } else if (item.getItemId() == R.id.share) {
-            if (getPresenter().getCommit() != null) ActivityHelper.shareUrl(this, getPresenter().getCommit().getHtmlUrl());
-            return true;
-        } else if (item.getItemId() == R.id.browser) {
-            if (getPresenter().getCommit() != null) ActivityHelper.startCustomTab(this, getPresenter().getCommit().getHtmlUrl());
-            return true;
-        } else if (item.getItemId() == R.id.copyUrl) {
-            if (getPresenter().getCommit() != null) AppHelper.copyToClipboard(this, getPresenter().getCommit().getHtmlUrl());
-            return true;
-        } else if (item.getItemId() == R.id.copySha) {
-            if (getPresenter().getCommit() != null) AppHelper.copyToClipboard(this, getPresenter().getCommit().getSha());
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onNavToRepoClicked();
+                return true;
+            case R.id.share:
+                if (getPresenter().getCommit() != null) ActivityHelper.shareUrl(this, getPresenter().getCommit().getHtmlUrl());
+                return true;
+            case R.id.browser:
+                if (getPresenter().getCommit() != null) ActivityHelper.startCustomTab(this, getPresenter().getCommit().getHtmlUrl());
+                return true;
+            case R.id.copyUrl:
+                if (getPresenter().getCommit() != null) AppHelper.copyToClipboard(this, getPresenter().getCommit().getHtmlUrl());
+                return true;
+            case R.id.copySha:
+                if (getPresenter().getCommit() != null) AppHelper.copyToClipboard(this, getPresenter().getCommit().getSha());
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

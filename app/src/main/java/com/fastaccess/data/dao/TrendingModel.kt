@@ -12,7 +12,8 @@ data class TrendingModel(
         val forks: String? = null,
         val todayStars: String? = null) : KotlinParcelable {
     companion object {
-        @JvmField val CREATOR = parcelableCreator(::TrendingModel)
+        @JvmField
+        val CREATOR = parcelableCreator(::TrendingModel)
     }
 
     constructor(source: Parcel) : this(

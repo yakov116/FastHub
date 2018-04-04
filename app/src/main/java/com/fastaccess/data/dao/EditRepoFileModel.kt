@@ -39,6 +39,7 @@ data class EditRepoFileModel(val login: String,
     }
 
     companion object {
-        @JvmField val CREATOR = parcelableCreator(::EditRepoFileModel)
+        @JvmField
+        val CREATOR = parcelableCreator(::EditRepoFileModel)
     }
 }

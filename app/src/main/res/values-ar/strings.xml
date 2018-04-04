@@ -228,7 +228,6 @@
     <string name="turn_off">إيقاف</string>
     <string name="unauthorized_user">مستخدم غير مرخص</string>
     <string name="two_factors_otp_error">مطلوب توثيق ثنائي</string>
-    <string name="no_issue">لا توجد علل</string>
     <string name="copy">نسخ</string>
     <string name="success_copied">تم النسخ</string>
     <string name="commit_message">رسالة التسليم</string>

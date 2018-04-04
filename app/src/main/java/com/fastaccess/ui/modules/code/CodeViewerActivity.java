@@ -102,40 +102,41 @@ public class CodeViewerActivity extends BaseActivity {
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         if (InputHelper.isEmpty(url)) return super.onOptionsItemSelected(item);
-        if (item.getItemId() == R.id.viewAsCode) {
-            ViewerFragment viewerFragment = (ViewerFragment) AppHelper.getFragmentByTag(getSupportFragmentManager(), ViewerFragment.TAG);
-            if (viewerFragment != null) {
-                viewerFragment.onViewAsCode();
-            }
-            return true;
-        } else if (item.getItemId() == R.id.download) {
-            if (ActivityHelper.checkAndRequestReadWritePermission(this)) {
-                RestProvider.downloadFile(this, url);
-            }
-            return true;
-        } else if (item.getItemId() == R.id.browser) {
-            ActivityHelper.openChooser(this, htmlUrl != null ? htmlUrl : url);
-            return true;
-        } else if (item.getItemId() == R.id.copy) {
-            AppHelper.copyToClipboard(this, htmlUrl != null ? htmlUrl : url);
-            return true;
-        } else if (item.getItemId() == R.id.share) {
-            ActivityHelper.shareUrl(this, htmlUrl != null ? htmlUrl : url);
-            return true;
-        } else if (item.getItemId() == android.R.id.home) {
-            Uri uri = Uri.parse(url);
-            if (uri == null) {
+        switch (item.getItemId()) {
+            case R.id.viewAsCode:
+                ViewerFragment viewerFragment = (ViewerFragment) AppHelper.getFragmentByTag(getSupportFragmentManager(), ViewerFragment.TAG);
+                if (viewerFragment != null) {
+                    viewerFragment.onViewAsCode();
+                }
+                return true;
+            case R.id.download:
+                if (ActivityHelper.checkAndRequestReadWritePermission(this)) {
+                    RestProvider.downloadFile(this, url);
+                }
+                return true;
+            case R.id.browser:
+                ActivityHelper.openChooser(this, htmlUrl != null ? htmlUrl : url);
+                return true;
+            case R.id.copy:
+                AppHelper.copyToClipboard(this, htmlUrl != null ? htmlUrl : url);
+                return true;
+            case R.id.share:
+                ActivityHelper.shareUrl(this, htmlUrl != null ? htmlUrl : url);
+                return true;
+            case android.R.id.home:
+                Uri uri = Uri.parse(url);
+                if (uri == null) {
+                    finish();
+                    return true;
+                }
+                String gistId = LinkParserHelper.getGistId(uri);
+                if (!InputHelper.isEmpty(gistId)) {
+                    startActivity(GistActivity.createIntent(this, gistId, isEnterprise()));
+                } else {
+                    RepoFilesActivity.startActivity(this, url, isEnterprise());
+                }
                 finish();
                 return true;
-            }
-            String gistId = LinkParserHelper.getGistId(uri);
-            if (!InputHelper.isEmpty(gistId)) {
-                startActivity(GistActivity.createIntent(this, gistId, isEnterprise()));
-            } else {
-                RepoFilesActivity.startActivity(this, url, isEnterprise());
-            }
-            finish();
-            return true;
         }
         return super.onOptionsItemSelected(item);
     }

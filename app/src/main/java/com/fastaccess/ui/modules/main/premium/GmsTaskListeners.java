@@ -13,35 +13,31 @@ public final class GmsTaskListeners {
   }
 
   public static <T> OnCompleteListener<T> listener(@NonNull final SingleEmitter<T> emitter) {
-    return new OnCompleteListener<T>() {
-      @Override public void onComplete(@NonNull Task<T> task) {
-        if (!task.isSuccessful()) {
-          if (!emitter.isDisposed()) {
-            emitter.onError(task.getException());
-          }
-          return;
-        }
-
+    return task -> {
+      if (!task.isSuccessful()) {
         if (!emitter.isDisposed()) {
-          emitter.onSuccess(task.getResult());
+          emitter.onError(task.getException());
         }
+        return;
+      }
+
+      if (!emitter.isDisposed()) {
+        emitter.onSuccess(task.getResult());
       }
     };
   }
 
   public static OnCompleteListener<Void> listener(@NonNull final CompletableEmitter emitter) {
-    return new OnCompleteListener<Void>() {
-      @Override public void onComplete(@NonNull Task<Void> task) {
-        if (!task.isSuccessful()) {
-          if (!emitter.isDisposed()) {
-            emitter.onError(task.getException());
-          }
-          return;
-        }
-
+    return task -> {
+      if (!task.isSuccessful()) {
         if (!emitter.isDisposed()) {
-          emitter.onComplete();
+          emitter.onError(task.getException());
         }
+        return;
+      }
+
+      if (!emitter.isDisposed()) {
+        emitter.onComplete();
       }
     };
   }

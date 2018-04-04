@@ -90,13 +90,17 @@ public class ProfileOverviewFragment extends BaseFragment<ProfileOverviewMvp.Vie
     }
 
     @OnClick({R.id.following, R.id.followers, R.id.followBtn}) void onClick(View view) {
-        if (view.getId() == R.id.followers) {
-            profileCallback.onNavigateToFollowers();
-        } else if (view.getId() == R.id.following) {
-            profileCallback.onNavigateToFollowing();
-        } else if (view.getId() == R.id.followBtn) {
-            getPresenter().onFollowButtonClicked(getPresenter().getLogin());
-            followBtn.setEnabled(false);
+        switch (view.getId()) {
+            case R.id.followers:
+                profileCallback.onNavigateToFollowers();
+                break;
+            case R.id.following:
+                profileCallback.onNavigateToFollowing();
+                break;
+            case R.id.followBtn:
+                getPresenter().onFollowButtonClicked(getPresenter().getLogin());
+                followBtn.setEnabled(false);
+                break;
         }
     }
 

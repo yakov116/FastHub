@@ -72,7 +72,7 @@ class RepoProjectsFragmentPager : BaseFragment<BaseMvp.FAView, BasePresenter<Bas
     }
 
     companion object {
-        val TAG = RepoProjectsFragmentPager::class.java.simpleName
+        val TAG = RepoProjectsFragmentPager::class.java.simpleName!!
         fun newInstance(login: String, repoId: String? = null): RepoProjectsFragmentPager {
             val fragment = RepoProjectsFragmentPager()
             fragment.arguments = Bundler.start()

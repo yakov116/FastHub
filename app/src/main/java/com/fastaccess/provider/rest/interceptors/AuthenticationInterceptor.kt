@@ -21,7 +21,8 @@ class AuthenticationInterceptor : Interceptor {
         this.isScrapping = isScrapping
     }
 
-    @Throws(IOException::class) override fun intercept(chain: Interceptor.Chain): Response {
+    @Throws(IOException::class)
+    override fun intercept(chain: Interceptor.Chain): Response {
         val original = chain.request()
         val builder = original.newBuilder()
         val isEnterprise = LinkParserHelper.isEnterprise(original.url().host())

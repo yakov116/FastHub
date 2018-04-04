@@ -68,9 +68,7 @@ class CheckPurchaseActivity : Activity() {
     }
 
     override fun onDestroy() {
-        progress?.let {
-            it.dismiss()
-        }
+        progress?.dismiss()
         disposable?.let {
             if (!it.isDisposed) it.dispose()
         }
